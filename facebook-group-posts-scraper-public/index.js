@@ -35,10 +35,10 @@ async function getDataListFromFile(filename) {
     const jsonContent = item;
 
     const hash_content = await get_sha256_hash(description);
-    // if(description.indexOf('… More') >= 0 || description.indexOf('… เพิ่มเติม') >= 0) {
-    //   sleep(((Math.floor(Math.random() * 2)) + 2) * 50)
-    //   description = await getMoreDetail(id)
-    // }
+    if(description.indexOf('… More') >= 0 || description.indexOf('… เพิ่มเติม') >= 0) {
+      sleep(((Math.floor(Math.random() * 2)) + 2) * 50)
+      description = await getMoreDetail(id)
+    }
 
     if(typeof(es_hash[hash_content]) == 'undefined' && id && id != 'undefined' 
       && description != 'undefined' && description 
@@ -266,49 +266,51 @@ async function clear_old_file_data(){
   });
 }
 
+async function getMoreDetail(url) {
+  const puppeteer = require('puppeteer');
+  const browserOptions = {
+    headless: true,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sendbox',
+      '--disable-dev-shm-usage',
+      '--disable-accelerated-2d-canvas',
+      '--disable-gpu',
+      '--lang=en-GB'
+    ],
+  };
 
+  if (process.arch === 'arm' || process.arch === 'arm64') {
+    // If processor architecture is arm or arm64 we need to use chromium browser
+    browserOptions.executablePath = 'chromium-browser';
+  }
 
-// async function getMoreDetail(url) {
-//   const puppeteer = require('puppeteer');
-//   const browserOptions = {
-//     headless: true,
-//     args: [
-//       '--no-sandbox',
-//       '--disable-setuid-sendbox',
-//       '--disable-dev-shm-usage',
-//       '--disable-accelerated-2d-canvas',
-//       '--disable-gpu',
-//       '--lang=en-GB'
-//     ],
-//   };
+  const browser = await puppeteer.launch(browserOptions);
+  let page = await browser.newPage();
+  await page.setUserAgent("User agent Mozilla/5.0 (Macintosh; Intel Mac OS X 10_16_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.0 Safari/537.36");
 
-//   if (process.arch === 'arm' || process.arch === 'arm64') {
-//     // If processor architecture is arm or arm64 we need to use chromium browser
-//     browserOptions.executablePath = 'chromium-browser';
-//   }
+  await page.goto(
+    url,
+    {timeout: 600000},
+  );
 
-//   const browser = await puppeteer.launch(browserOptions);
-//   let page = await browser.newPage();
-//   await page.setUserAgent("User agent Mozilla/5.0 (Macintosh; Intel Mac OS X 10_16_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.0 Safari/537.36");
+  sleep(((Math.floor(Math.random() * 2)) + 2) * 1000)
 
-//   await page.goto(
-//     url,
-//     {timeout: 600000},
-//   );
+  let resultsData = await page.evaluate(() =>  {
+    let content = document.querySelectorAll('p');
+    let newContent = ''
+    for(itemcontent of content) {
+      if(itemcontent != null && typeof itemcontent != 'undefined') {
+        newContent+= typeof itemcontent.innerText == 'undefined' || itemcontent.innerText == null ? '' : itemcontent.innerText
+      }
+    }
+    return newContent
+  })
+  sleep(((Math.floor(Math.random() * 2)) + 2) * 1000)
 
-//   let resultsData = await page.evaluate(() =>  {
-//     let content = document.querySelectorAll('p');
-//     let newContent = ''
-//     for(itemcontent of content) {
-//       if(itemcontent != null && typeof itemcontent != 'undefined') {
-//         newContent+= typeof itemcontent.innerText == 'undefined' || itemcontent.innerText == null ? '' : itemcontent.innerText
-//       }
-//     }
-//     return newContent
-//   })
-//   await browser.close();
-//   return resultsData
-// }
+  await browser.close();
+  return resultsData
+}
 
 async function sleep(time) {
   return new Promise(function(resolve) {
