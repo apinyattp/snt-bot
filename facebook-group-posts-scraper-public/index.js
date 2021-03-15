@@ -1,10 +1,9 @@
 var fs  = require('fs');
 const path = require('path');
-const request = require('request')
-var es_service = require('./../../smt-es-service/es-util');
-var es_constant = require('./../../smt-es-service/configs/constant');
-const ES_SOURCE = es_constant.ES_SOURCE.facebook_group;
-var autoML = require('./../../smt-ML/autoML-Google_fb');
+const request = require('request-promise')
+var hash = require('hash.js')
+const ES_SOURCE = 'fb_g';
+var autoML = require('./../auto-ML/autoML-Google_fb');
 var elasticsearch = require('elasticsearch');
 var client = new elasticsearch.Client({
   host: process.env.ES_HOST,
@@ -35,7 +34,7 @@ async function getDataListFromFile(filename) {
     const from = {"display_image":"","email":"","id":"","name":item.author};
     const jsonContent = item;
 
-    const hash_content = await es_service.get_sha256_hash(description);
+    const hash_content = await get_sha256_hash(description);
     // if(description.indexOf('… More') >= 0 || description.indexOf('… เพิ่มเติม') >= 0) {
     //   sleep(((Math.floor(Math.random() * 2)) + 2) * 50)
     //   description = await getMoreDetail(id)
@@ -178,11 +177,20 @@ async function start_index_detail(dirname) {
   return result_arr;
 }
 
+async function getElasticSearch() {
+
+  let data = await request({
+    method: 'GET',
+    uri: 'https://realestate.bdata.asia/api/connectEs/getElasticSearch'
+  })
+  return data
+}
+
 async function add_index_es(item){
 
   var data = await request({
     method: 'POST',
-    uri: 'http://realestate.bdata.asia/api/connectEs/connectEs',
+    uri: 'https://realestate.bdata.asia/api/connectEs/connectEs',
     header: {
       'Content-Type': 'application/json',
     },
@@ -194,7 +202,7 @@ async function add_index_es(item){
 }
 
 async function main(){
-  await es_service.init_es();
+  // await es_service.init_es();
   const result_rows = await start_index_detail('./data/');
   for(item of result_rows){
     var id = await add_index_es(item);
@@ -258,47 +266,7 @@ async function clear_old_file_data(){
   });
 }
 
-async function querySearchData(is_prd) {
-  var match = []
-  var date_range = is_prd == 0 ? 'now-60d' : 'now-10d'
-  var match = [{
-      "range" : {
-          "dt": { "gte" : date_range }
-      }
-  }]
 
-  var query_search = {
-    "must": match,
-  }
-
-  return query_search
-}
-
-async function getElasticSearch() {
-  var query_search = await querySearchData(1)
-  var result = await client.search({
-      index: process.env.ES_NAME,
-      body: {
-          size: 1,
-          from: 1000, 
-          sort : {"dt": "desc"},
-          query : {
-              "bool": query_search
-          }
-      }
-  }).then(function(resp) {
-    if(resp.hits.total.value == 0) {
-      return []
-    }else{
-      return resp.hits.hits;
-    }
-     
-  }, function(err) {
-      console.trace(err.message);
-      return false
-  });
-  return result
-}
 
 // async function getMoreDetail(url) {
 //   const puppeteer = require('puppeteer');
@@ -349,11 +317,12 @@ async function sleep(time) {
 }
 
 async function init(){
-  var a_search_es = await getElasticSearch();
+  let a_search_es = await getElasticSearch();
+  a_search_es = JSON.parse(a_search_es)
   if(a_search_es.length > 0) {
     for(item_es of a_search_es) {
-      var item_source = item_es._source
-      const hash_content = await es_service.get_sha256_hash(item_source.c);
+      let item_source = item_es._source
+      const hash_content = await get_sha256_hash(item_source.c);
       es_hash[hash_content] = 1
     }
   }
@@ -362,6 +331,10 @@ async function init(){
   await clear_old_file_data();
   var message = 'FB Scraper Public Group is: ' + count_text
   await sendNotifyAdmin(message);
+}
+
+function get_sha256_hash(key){
+  return hash.sha256().update(key).digest('hex');
 }
 
 init();
