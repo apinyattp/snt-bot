@@ -8,7 +8,6 @@ var elasticsearch = require('elasticsearch');
 var client = new elasticsearch.Client({
   host: process.env.ES_HOST,
 });
-
 var start_all = 0;
 var count_text = 0
 var es_hash = []
