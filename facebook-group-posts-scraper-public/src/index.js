@@ -255,7 +255,8 @@ async function createBrowser(arguments) {
       '--disable-dev-shm-usage',
       '--disable-accelerated-2d-canvas',
       '--disable-gpu',
-      '--lang=en-GB'
+      '--lang=en-GB',
+      '--disable-setuid-sandbox'
     ],
   };
 
