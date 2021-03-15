@@ -179,14 +179,18 @@ async function start_index_detail(dirname) {
 }
 
 async function add_index_es(item){
-  const id = await es_service.get_sha256_hash(item.u + '_' + item.s + '_' + item.c);
-  const get_id = await es_service.getById(id)
-  if(get_id.hits.total.value > 0) {
-    await es_service.updateDoc(item, id);
-  }else{
-    await es_service.add_index_with_content(item);
-  }
-  return id
+
+  var data = await request({
+    method: 'POST',
+    uri: 'http://realestate.bdata.asia/api/connectEs/connectEs',
+    header: {
+      'Content-Type': 'application/json',
+    },
+    json: {
+      items: item,
+    },
+  })
+  return true
 }
 
 async function main(){
