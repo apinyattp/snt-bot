@@ -197,7 +197,7 @@ async function add_index_es(item){
       items: item,
     },
   })
-  return true
+  return data;
 }
 
 async function main(){
