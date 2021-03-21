@@ -332,55 +332,8 @@ async function setPageListeners(page) {
 * @return {Page} returns the page when the user logged in
 **/
 async function facebookLogIn(arguments, page, setPageListeners) {
-  // await page.goto('https://facebook.com', { waitUntil: "networkidle2" });
-  // console.log(await page.evaluate(() => document.title));
-  // console.log(await page.evaluate(() => document.cookie));
   await setPageListeners(page);
   return page;
-  // if (!Object.keys(cookies).length) {
-  //     // Goes to base facebook url
-  //   await page.goto('https://facebook.com', { waitUntil: "networkidle2" });
-  //   // await page.waitForXPath('//button[@data\-cookiebanner="accept_button"]');
-  //   // var acceptCookiesButton = (await page.$x('//button[@data\-cookiebanner="accept_button"]'))[0];
-  //   // await page.evaluate(el => {
-  //   //   el.focus();
-  //   //   el.click();
-  //   // }, acceptCookiesButton)
-  //   /**
-  //    * Waiting for login form JQuery selector to avoid
-  //    * that forms elements to be not found
-  //   **/
-  //   await page.waitForSelector(selectors.login_form.parent);
-  //   // Focusing to the email input
-  //   await page.focus(selectors.login_form.email);
-  //   // Clicking on the email form input to be able to type on input
-  //   await page.focus(selectors.login_form.email);
-  //   // Typing on the email input the email address
-  //   await page.keyboard.type(config.get('username'), { delay: 30 });
-  //   // Focusing on the password input
-  //   await page.focus(selectors.login_form.password);
-  //   // Typing the facebook password on password input
-  //   await page.keyboard.type(config.get('password'), { delay: 30 });
-  //   // Clicking on the submit button
-  //   // await page.waitForXPath("//button[contains(., 'Log In')]")
-  //   // const [loginButton] = await page.$x("//button[contains(., 'Log In')]");
-  //   // await page.evaluate((el) => {
-  //   //   el.click();
-  //   // }, loginButton);
-  //   await sleep(500);
-
-  //   await page.click("#u_0_b")
-  //   await page.waitForNavigation({ waitUntil: "networkidle0" });
-  //   let currentCookies = await page.cookies();
-  //   fs.writeFileSync('./cookies.json', JSON.stringify(currentCookies));
-  //   await page.waitForXPath('//div[@data\-pagelet="Stories"]');
-  //   await setPageListeners(page);
-  //   return page;
-  // }else{
-  //   // console.log('login already')
-  //   await setPageListeners(page);
-  //   return page;
-  // }
 }
 
 /**
@@ -703,32 +656,35 @@ async function main(
     await userConfig(askQuestionsFunction, validator);
   }
 
-//groups
-//  arguments['group-ids'] = '458098031664389,828001787348618,taradcondo,493801904328548,1604160379797295,1809918985887417,1965252317136254,275678356775719,prakard,728861290645180,770357389784713,landtoyou,211520586207563,299716057099018,201506827113877,1986622261663799,1166087117123565,inbangkokcondo,381475698884152,628600341344108,1922484551318356,461842327683291,774629652726107,condomarket,1900188416901425,918513708275659,property.exchange.center,328124851099063,235671627109277,698348860535511,210390739740584,694989714212908,hongdee,1687576608230772,895232507614250,1614893802095229,971888629619654,127202081207160,condobyamd,700053357211566,570276373309601,995615727143180,1508927629253734,anycondo,1974106929343755,doomyhome,702937023617112,656862761634217,630201357077874,1636126916415833,W3Living,325798948482396,plumrangsit,221945005610638,691539337669985,2648272705199689,2531929623686542,2490966460936700,2378803682335145,charoentran,2295227217356985,2159284734347274,2106929172957702,2064854547122015,2046245172358040,1909551669287104,1882723421791849,1788386674734122,1680661472170569,1672821179658958,1633478036765811,1627273357578168,1626040321016300,1582222215422425,1559048204330851,1512942549024788,1428708247230870,1424363091005180'
-///
-  const facebookGroupIdList = arguments['group-ids'].split(',');
   const browser = await createBrowser(arguments);
-  let page = await browser.newPage();
-  // let page = await incognitoMode(browser);
-  await page.setUserAgent("User agent Mozilla/5.0 (Macintosh; Intel Mac OS X 10_16_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.0 Safari/537.36");
-  page = await facebookLogIn(arguments, page, setPageListeners);
-  // for (var i = 0; i < facebookGroupIdList.length; i++) {
-  for (let i = 0; i < facebookGroupIdList.length; i++) {
-    const id = facebookGroupIdList[i];
-    const groupUrl = generateFacebookGroupUrlFromId(id);
+  try {
+    const facebookGroupIdList = arguments['group-ids'].split(',');
+    let page = await browser.newPage();
+    // let page = await incognitoMode(browser);
+    await page.setUserAgent("User agent Mozilla/5.0 (Macintosh; Intel Mac OS X 10_16_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.0 Safari/537.36");
+    page = await facebookLogIn(arguments, page, setPageListeners);
+    // for (var i = 0; i < facebookGroupIdList.length; i++) {
+    for (let i = 0; i < facebookGroupIdList.length; i++) {
+      const id = facebookGroupIdList[i];
+      const groupUrl = generateFacebookGroupUrlFromId(id);
 
-    await facebookMain(
-        arguments,
-        groupUrl,
-        page,
-        id,
-        getOldPublications,
-        autoScroll,
-        sleep,
-    );
+      await facebookMain(
+          arguments,
+          groupUrl,
+          page,
+          id,
+          getOldPublications,
+          autoScroll,
+          sleep,
+      );
+    }
+    await browser.close();
+  }catch (e) {
+    await browser.close();
+    console.error(e)
+  } finally {
+    await browser.close();
   }
-  await browser.close();
-  // await sendNotifyAdmin('public donne')
 }
 
 if (
