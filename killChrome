@@ -1,0 +1,6 @@
+function killChrome() {
+  let shell = require('shelljs');
+  shell.exec('pkill chrome')
+}
+
+killChrome();
