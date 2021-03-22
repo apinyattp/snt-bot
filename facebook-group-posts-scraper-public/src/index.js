@@ -26,6 +26,7 @@ const arguments = minimist(
       stopEarly: true, /* populate _ with first non-option */
     },
 );
+const shell = require('shelljs');
 
 /**
 * Function handles the validation of a string.
@@ -652,6 +653,9 @@ async function main(
     autoScroll,
     sleep,
 ) {
+
+  shell.exec('pkill chrome')
+
   if (isUserConfigured() === false) {
     await userConfig(askQuestionsFunction, validator);
   }
