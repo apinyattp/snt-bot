@@ -205,7 +205,7 @@ async function main(){
   const result_rows = await start_index_detail('./data/');
   for(item of result_rows){
     var id = await add_index_es(item);
-    console.log(id)
+    console.log(11,id)
     if(id != '') {
       if(item.t == 'buy' || item.t == 'rent') {
         var message = 'https://realestate.bdata.asia/detail?id=' + id
