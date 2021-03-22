@@ -502,7 +502,7 @@ async function facebookMain(
       }
 
     if(datetime.indexOf('at') > 0 || datetime.indexOf('hrs') > 0){
-      if(count < 5) {
+      if(count < 3) {
         count++;
         continue;
       }else{
