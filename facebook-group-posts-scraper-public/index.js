@@ -205,13 +205,15 @@ async function main(){
   const result_rows = await start_index_detail('./data/');
   for(item of result_rows){
     var id = await add_index_es(item);
-    if(item.t == 'buy' || item.t == 'rent') {
-      var message = 'https://realestate.bdata.asia/detail?id=' + id
-      await sendNotify(message, '9ucrSlKS0VPTYam8IowqX27sdSecWhnG87HeOgFR38p')
-    }
-    if(item.t == 'rentout') {
-      var message = 'https://realestate.bdata.asia/detail?id=' + id
-      await sendNotify(message , 'N1zeKEkOOckbFL7CZroqM1IwNyu1mWOIAUX1P5Pzajq')
+    if(id != '') {
+      if(item.t == 'buy' || item.t == 'rent') {
+        var message = 'https://realestate.bdata.asia/detail?id=' + id
+        await sendNotify(message, '9ucrSlKS0VPTYam8IowqX27sdSecWhnG87HeOgFR38p')
+      }
+      if(item.t == 'rentout') {
+        var message = 'https://realestate.bdata.asia/detail?id=' + id
+        await sendNotify(message , 'N1zeKEkOOckbFL7CZroqM1IwNyu1mWOIAUX1P5Pzajq')
+      }
     }
   }
   var end_all = new Date() - start_all
