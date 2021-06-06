@@ -278,13 +278,14 @@ async function createBrowser(arguments) {
 * @return {Page} returns the page in the incognito mode
 **/
 async function incognitoMode(browser) {
+  console.log(11)
   /**
    * We need an incognito browser to avoid notification
    *  and location permissions of Facebook
    **/
-  // const incognitoContext = await browser.createIncognitoBrowserContext();
-  // // Creates a new borwser tab
-  // const page = await incognitoContext.newPage();
+  const incognitoContext = await browser.createIncognitoBrowserContext();
+  // Creates a new borwser tab
+  const page = await incognitoContext.newPage();
   return page;
 }
 
