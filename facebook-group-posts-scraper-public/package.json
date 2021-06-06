@@ -1,29 +1,18 @@
 {
-  "author": {
-    "name": "İdil Sağlam",
-    "email": "idil.saglam@makepad.fr",
-    "url": "https://idilsaglam.com"
-  },
   "bin": {
     "fgps": "src/index.js"
   },
-  "bundleDependencies": false,
-  "contributors": [
-    {
-      "name": "Kaan Yağcı",
-      "email": "kaan.yagci@makepad.fr",
-      "url": "https://kaanyagci.com"
-    }
-  ],
   "dependencies": {
     "chalk": "^4.0.0",
+    "chromium": "^3.0.2",
     "configstore": "^5.0.1",
     "elasticsearch": "^16.7.2",
     "hash.js": "^1.1.7",
     "inquirer": "^7.1.0",
-    "puppeteer": "^2.0.0",
+    "puppeteer": "^2.1.1",
     "request": "^2.88.2",
-    "request-promise": "^4.2.6"
+    "request-promise": "^4.2.6",
+    "shelljs": "^0.8.4"
   },
   "description": "Facebook group posts scraper",
   "keywords": [
@@ -49,13 +38,5 @@
     "eslint": "^6.8.0",
     "eslint-config-google": "^0.14.0",
     "jasmine": "^3.5.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Clique-Paris/facebook-group-posts-scraper.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Clique-Paris/facebook-group-posts-scraper/issues",
-    "email": "idil.saglam@makepad.fr"
   }
 }
