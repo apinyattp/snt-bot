@@ -404,7 +404,7 @@ async function facebookMain(
   // Navigates to the first facebook group Türk Ögrenciler - Paris
   await page.goto(
       groupUrl,
-      {timeout: 6000000},
+      {timeout: 600000},
   );
 
   /**
@@ -682,12 +682,12 @@ async function main(
           sleep,
       );
     }
-    await browser.close();
+    // await browser.close();
   }catch (e) {
-    await browser.close();
+    // await browser.close();
     console.error(e)
   } finally {
-    await browser.close();
+    // await browser.close();
   }
 }
 
