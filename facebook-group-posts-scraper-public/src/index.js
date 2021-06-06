@@ -250,6 +250,7 @@ function generateFacebookGroupUrlFromId(groupId) {
 async function createBrowser(arguments) {
   const browserOptions = {
     headless: arguments['headful'] === false,
+    userDataDir: './pupeeteer_data',
     args: [
       '--no-sandbox',
       '--disable-setuid-sendbox',
@@ -682,12 +683,12 @@ async function main(
           sleep,
       );
     }
-    // await browser.close();
+    await browser.close();
   }catch (e) {
-    // await browser.close();
+    await browser.close();
     console.error(e)
   } finally {
-    // await browser.close();
+    await browser.close();
   }
 }
 
