@@ -267,8 +267,6 @@ async function createBrowser(arguments) {
   }
 
   const browser = await puppeteer.launch(browserOptions);
-  const context = browser.defaultBrowserContext();
-  context.overridePermissions('https://m.facebook.com', []);
   return browser;
 }
 
@@ -284,9 +282,9 @@ async function incognitoMode(browser) {
    * We need an incognito browser to avoid notification
    *  and location permissions of Facebook
    **/
-  const incognitoContext = await browser.createIncognitoBrowserContext();
-  // Creates a new borwser tab
-  const page = await incognitoContext.newPage();
+  // const incognitoContext = await browser.createIncognitoBrowserContext();
+  // // Creates a new borwser tab
+  // const page = await incognitoContext.newPage();
   return page;
 }
 
@@ -403,11 +401,10 @@ async function facebookMain(
     autoScroll,
     sleep,
 ) {
-  // console.log(1234,groupUrl)
   // Navigates to the first facebook group Türk Ögrenciler - Paris
   await page.goto(
-      groupUrl
-      // {timeout: 600000},
+      groupUrl,
+      {timeout: 600000},
   );
 
   /**
