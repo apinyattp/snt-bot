@@ -282,9 +282,9 @@ async function incognitoMode(browser) {
    * We need an incognito browser to avoid notification
    *  and location permissions of Facebook
    **/
-  // const incognitoContext = await browser.createIncognitoBrowserContext();
-  // // Creates a new borwser tab
-  // const page = await incognitoContext.newPage();
+  const incognitoContext = await browser.createIncognitoBrowserContext();
+  // Creates a new borwser tab
+  const page = await incognitoContext.newPage();
   return page;
 }
 
@@ -404,7 +404,7 @@ async function facebookMain(
   // Navigates to the first facebook group Türk Ögrenciler - Paris
   await page.goto(
       groupUrl,
-      {timeout: 600000},
+      {timeout: 6000000},
   );
 
   /**
