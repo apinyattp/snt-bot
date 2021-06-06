@@ -2,6 +2,7 @@
   "bin": {
     "fgps": "src/index.js"
   },
+  "bundleDependencies": false,
   "dependencies": {
     "chalk": "^4.0.0",
     "chromium": "^3.0.2",
@@ -11,8 +12,7 @@
     "inquirer": "^7.1.0",
     "puppeteer": "^2.1.1",
     "request": "^2.88.2",
-    "request-promise": "^4.2.6",
-    "shelljs": "^0.8.4"
+    "request-promise": "^4.2.6"
   },
   "description": "Facebook group posts scraper",
   "keywords": [
