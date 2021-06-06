@@ -401,6 +401,7 @@ async function facebookMain(
     autoScroll,
     sleep,
 ) {
+  console.log(1234,groupUrl)
   // Navigates to the first facebook group Türk Ögrenciler - Paris
   await page.goto(
       groupUrl,
