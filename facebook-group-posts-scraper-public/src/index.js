@@ -238,7 +238,7 @@ async function autoScroll(page, sleep) {
 * related to the given Facebook group id
 **/
 function generateFacebookGroupUrlFromId(groupId) {
-  return 'https://m.facebook.com/groups/' + groupId + '/';
+  return 'm.facebook.com/groups/' + groupId + '/';
 }
 
 /**
@@ -278,7 +278,6 @@ async function createBrowser(arguments) {
 * @return {Page} returns the page in the incognito mode
 **/
 async function incognitoMode(browser) {
-  console.log(11)
   /**
    * We need an incognito browser to avoid notification
    *  and location permissions of Facebook
