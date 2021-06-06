@@ -682,12 +682,12 @@ async function main(
           sleep,
       );
     }
-    await browser.close();
+    // await browser.close();
   }catch (e) {
-    await browser.close();
+    // await browser.close();
     console.error(e)
   } finally {
-    await browser.close();
+    // await browser.close();
   }
 }
 
