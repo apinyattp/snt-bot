@@ -250,6 +250,7 @@ function generateFacebookGroupUrlFromId(groupId) {
 async function createBrowser(arguments) {
   const browserOptions = {
     headless: arguments['headful'] === false,
+    userDataDir: './pupeeteer_data',
     args: [
       '--no-sandbox',
       '--disable-setuid-sendbox',
@@ -404,7 +405,7 @@ async function facebookMain(
   // Navigates to the first facebook group Türk Ögrenciler - Paris
   await page.goto(
       groupUrl,
-      {timeout: 600000},
+      {timeout: 6000000},
   );
 
   /**
