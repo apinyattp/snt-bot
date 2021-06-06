@@ -238,7 +238,7 @@ async function autoScroll(page, sleep) {
 * related to the given Facebook group id
 **/
 function generateFacebookGroupUrlFromId(groupId) {
-  return 'https://m.facebook.com/groups/' + groupId;
+  return 'https://m.facebook.com/groups/' + groupId + '/';
 }
 
 /**
