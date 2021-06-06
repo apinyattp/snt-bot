@@ -667,8 +667,9 @@ async function main(
     let page = await browser.newPage();
     // let page = await incognitoMode(browser);
     await page.setUserAgent("User agent Mozilla/5.0 (Macintosh; Intel Mac OS X 10_16_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.0 Safari/537.36");
-    page = await facebookLogIn(arguments, page, setPageListeners);
+    // page = await facebookLogIn(arguments, page, setPageListeners);
     // for (var i = 0; i < facebookGroupIdList.length; i++) {
+     await setPageListeners(page);
     for (let i = 0; i < facebookGroupIdList.length; i++) {
       const id = facebookGroupIdList[i];
       const groupUrl = generateFacebookGroupUrlFromId(id);
